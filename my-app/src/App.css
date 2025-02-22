@@ -1,0 +1,131 @@
+:root {
+    --primary-color: #3b82f6;
+    --error-color: #ef4444;
+    --text-color: #374151;
+    --border-color: #e5e7eb;
+  }
+  
+  /* Auth Pages */
+  .auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+    padding: 20px;
+  }
+  
+  .auth-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  /* Tasks Page */
+  .tasks-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .task-form {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+  
+  .task-input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .tasks-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .task-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+  }
+  
+  .task-description {
+    color: #6b7280;
+    margin-bottom: 1rem;
+  }
+  
+  .task-status {
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-color);
+  }
+  
+  .task-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  
+  .task-button:first-of-type {
+    background-color: #34d399;
+    color: white;
+  }
+  
+  .task-button:last-of-type {
+    background-color: #ef4444;
+    color: white;
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #2563eb;
+  }
+  
+  .error-message {
+    color: var(--error-color);
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .tasks-list {
+      grid-template-columns: 1fr;
+    }
+    
+    .task-form {
+      margin: 1rem;
+    }
+  }

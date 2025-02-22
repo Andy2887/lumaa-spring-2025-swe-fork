@@ -4,11 +4,11 @@ import { AuthContext } from '../../components/AuthContext';
 
 
 export default function Login() {
-    const [username, setUsername] = useState('');
+    // const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { setLoggedIn } = useContext(AuthContext);
+    const { setLoggedIn, setUserId, username, setUsername} = useContext(AuthContext);
 
 
     async function login(ev : React.FormEvent){
@@ -28,8 +28,11 @@ export default function Login() {
             }
             else{
                 setError('');
+                setUserId(data.userid);
+                setUsername(data.username);
                 setLoggedIn(true);
                 navigate('/tasks');
+                
             }
 
         }catch(e){
