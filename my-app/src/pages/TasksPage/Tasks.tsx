@@ -3,14 +3,16 @@ import TaskObject from "../../components/Task";
 import { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../../components/AuthContext';
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function Tasks() { 
+    const navigate = useNavigate();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [newTaskTitle, setNewTaskTitle] = useState<string>('');
     const [newTaskDescription, setnewTaskDescription] = useState<string>('');
-    const { username, userid } = useContext(AuthContext);
+    const { username, userid, setLoggedIn, setUserId, setUsername } = useContext(AuthContext);
 
     async function fetchTasks() {
         try {
@@ -39,6 +41,24 @@ export default function Tasks() {
             }
             return task;
         }));
+    };
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('http://localhost:3005/auth/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                setLoggedIn(false);
+                setUserId(-1);
+                setUsername('');
+                navigate('/login');
+            }
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
     };
 
     useEffect(() => {
@@ -86,7 +106,15 @@ export default function Tasks() {
     return (
 
         <div className="tasks-page">
-            <h1>Welcome {username}</h1>
+            <div className="header">
+                <h1>Welcome {username}</h1>
+                <button 
+                    onClick={handleLogout}
+                    className="logout-button"
+                >
+                    Logout
+                </button>
+            </div>
             
             <form onSubmit={createTask} className="task-form">
                 <input

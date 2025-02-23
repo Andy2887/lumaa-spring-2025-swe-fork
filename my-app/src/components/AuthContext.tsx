@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 
 interface AuthContextType {
@@ -26,6 +26,7 @@ export function AuthProvider({ children }: any) {
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [userid, setUserId] = useState<number>(-1);
     const [username, setUsername] = useState<string>('');
+
 
     return (
         <AuthContext.Provider value={{ loggedIn, setLoggedIn, userid, setUserId, username, setUsername }}>
