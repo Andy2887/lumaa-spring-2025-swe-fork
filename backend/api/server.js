@@ -22,9 +22,9 @@ const pool = new Pool({
 });
 
 const app = express();
-
 app.use(cors({credentials:true, origin: 'http://localhost:3000'}));
 app.use(express.json());
+// Parses cookies attached to client requests
 app.use(cookieParser());
 
 
@@ -61,7 +61,8 @@ app.post('/auth/login', async (req, res) => {
 
   try {
     const result = await pool.query(query, values);
-
+    const userid = result.rows[0].id;
+    
     if (result.rows.length === 0) {
       res.status(400).json({message: 'Invalid username or password'});
       return;
@@ -75,12 +76,12 @@ app.post('/auth/login', async (req, res) => {
       return;
     }
 
-    jwt.sign({username}, process.env.JWT_SECRET, {expiresIn: '1h'}, (err, token) => {
+    jwt.sign({username, userid}, process.env.JWT_SECRET, {expiresIn: '1h'}, (err, token) => {
       if (err){
           res.status(400).json(err);
       }
       else{
-          res.cookie('token', token).json({message: 'success'});
+          res.cookie('token', token).json({message: 'success', userid: userid, username: username});
       }
     });
 
@@ -111,6 +112,22 @@ app.post('/auth/logout', (req, res) => {
   res.clearCookie('token').json({message: 'success'});
 });
 
+
+// return profile information
+app.get('/profile', (req, res) => {
+  const token = req.cookies.token;
+  if (!token) {
+      return res.status(400).json({ message: "No token provided" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+          return res.status(400).json({ message: "Invalid or expired token" });
+      }
+      res.status(200).json(decoded);
+  });
+});
+
 app.get('/tasks', async (req, res) => {
   const query = `SELECT * FROM tasks`;
   try {
@@ -137,11 +154,11 @@ app.post('/tasks', async (req, res) => {
 
 // update a task
 app.put('/tasks/:id', async (req, res) => {
-  const {title, description, is_complete} = req.body;
+  const {is_complete} = req.body;
   const id = req.params.id;
 
-  const query = `UPDATE tasks SET title = $1, description = $2, is_complete = $3 WHERE id = $4`;
-  const values = [title, description, is_complete, id];
+  const query = `UPDATE tasks SET is_complete = $1 WHERE id = $2`;
+  const values = [is_complete, id];
 
   try {
     await pool.query(query, values);
